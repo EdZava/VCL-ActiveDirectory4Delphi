@@ -13,7 +13,10 @@ Delphi library (Basic) for validation and authentication of LDAP users in Active
 
 ## ✨ App Demo
 
-![Download](https://img.shields.io/github/downloads/edzava/VCL-ActiveDirectory4Delphi/latest/total)
+![Download](https://img.shields.io/github/downloads/EdZava/VCL-ActiveDirectory4Delphi/latest/total)
+![Release](https://img.shields.io/github/v/release/EdZava/VCL-ActiveDirectory4Delphi)
+
+[Download](https://github.com/EdZava/VCL-ActiveDirectory4Delphi/releases/latest/download/VCLActiveDirectory.zip)
 
 Example of use of the application and the information retrieved in the log.
 
