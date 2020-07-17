@@ -11,16 +11,70 @@ Delphi library (Basic) for validation and authentication of LDAP users in Active
 
 > It also has an application to test the library with Active Directory.
 
-## ✨ [App Demo](www.demo.com)
+## ✨ App Demo
 
+![Download](https://img.shields.io/github/downloads/edzava/VCL-ActiveDirectory4Delphi/latest/total)
 
-## Example Usage
+Example of use of the application and the information retrieved in the log.
+
+<p align="center">
+  <img width="900" align="center" src="./resources/screen-main.png" alt="demo"/>
+</p>
+
+### Get Current Info 
+
+Retrieve the information of the current section.
+
+Sample Log:
+```log
+AllProviders = WinNT:,LDAP:
+CurrentUserName = usuario1
+CurrentDomainName = MYDOMAIN
+CurrentLDAPDomainName = DC=MYDOMAIN,DC=TEST
+ActiveDirectoryEnabled = True
+```
+
+### Get User Info
+
+Retrieve user information using the domain and user indicated in the text boxes.
+
+Sample Log:
+```log
+Param.Domain = MYDOMAIN
+Param.UserName = usuario1
+UserFind = True
+UserActive = True
+UserInfo.UID = usuario1
+UserInfo.UserName = usuario1
+UserInfo.Description = Descripcion del usuario 1
+UserInfo.Password.Expired = False
+UserInfo.Password.NeverExpires = False
+UserInfo.Password.CannotChange = False
+UserInfo.Disabled = False
+UserInfo.LockedOut = False
+UserInfo.Groups = gusuarios,Usuarios del dominio
+```
+
+### Authenticate
+
+Authenticate using the domain and user indicated in the text boxes.
+
+Sample Log:
+```log
+Param.Domain = MYDOMAIN
+Param.UserName = usuario1
+Param.UserPass = *********
+Authenticated = True
+```
+
+## Example usage library
 
 ```delphi
 uses
   Common.ActiveDirectory.Utils;
 
 ...
+
 // example authenticate current user
 procedure Authenticate(UserPass: string);
 var
@@ -50,6 +104,8 @@ begin
     ShowMessage('Fail');
 end;
 ```
+
+more information look at the unit [Common.ActiveDirectory.Utils](./src/Common/Common.ActiveDirectory.Utils.pas)
 
 ## Author
 
