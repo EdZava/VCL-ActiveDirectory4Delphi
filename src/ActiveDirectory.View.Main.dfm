@@ -58,6 +58,7 @@ object frmMain: TfrmMain
     Font.Style = []
     ParentFont = False
     PopupMenu = PopupMenu
+    ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 2
   end
