@@ -7,7 +7,7 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)
 [![Twitter: ZavaDev](https://img.shields.io/twitter/follow/ZavaDev.svg?style=social)](https://twitter.com/ZavaDev)
 
-Delphi library (Basic) for validation and authentication of LDAP users in Active Directory
+Delphi Basic library for validation and authentication of LDAP users in Active Directory
 
 > It also has an application to test the library with Active Directory.
 
