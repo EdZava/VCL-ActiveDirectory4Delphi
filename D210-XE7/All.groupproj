@@ -1,0 +1,62 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{5B27D07F-CA3E-4D38-BA6A-1C802702B219}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\src\D210-XE7\ActiveDirectory4Delphi.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\samples\TestActiveDirectory\D210-XE7\TestActiveDirectory.dproj">
+            <Dependencies>..\src\D210-XE7\ActiveDirectory4Delphi.dproj</Dependencies>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ActiveDirectory4Delphi">
+        <MSBuild Projects="..\src\D210-XE7\ActiveDirectory4Delphi.dproj"/>
+    </Target>
+    <Target Name="ActiveDirectory4Delphi:Clean">
+        <MSBuild Projects="..\src\D210-XE7\ActiveDirectory4Delphi.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ActiveDirectory4Delphi:Make">
+        <MSBuild Projects="..\src\D210-XE7\ActiveDirectory4Delphi.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestActiveDirectory" DependsOnTargets="ActiveDirectory4Delphi">
+        <MSBuild Projects="..\samples\TestActiveDirectory\D210-XE7\TestActiveDirectory.dproj"/>
+    </Target>
+    <Target Name="TestActiveDirectory:Clean" DependsOnTargets="ActiveDirectory4Delphi:Clean">
+        <MSBuild Projects="..\samples\TestActiveDirectory\D210-XE7\TestActiveDirectory.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestActiveDirectory:Make" DependsOnTargets="ActiveDirectory4Delphi:Make">
+        <MSBuild Projects="..\samples\TestActiveDirectory\D210-XE7\TestActiveDirectory.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ActiveDirectory4Delphi;TestActiveDirectory"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ActiveDirectory4Delphi:Clean;TestActiveDirectory:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ActiveDirectory4Delphi:Make;TestActiveDirectory:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+    <ItemGroup Condition="'$(BuildGroup)'=='All'">
+        <BuildGroupProject Include="..\samples\TestActiveDirectory\D210-XE7\TestActiveDirectory.dproj">
+            <ProjectGuid>{75ACF6F6-EE54-45C4-8BDE-F5BE29B69CDF}</ProjectGuid>
+            <Configurations>Debug;Release</Configurations>
+            <Platforms>Win32;Win64</Platforms>
+            <Enabled>True</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="..\src\D210-XE7\ActiveDirectory4Delphi.dproj">
+            <ProjectGuid>{BFF1BEB7-1767-4894-BAD0-C8C3C68CC914}</ProjectGuid>
+            <Configurations>Debug;Release</Configurations>
+            <Platforms>Win32;Win64</Platforms>
+            <Enabled>True</Enabled>
+        </BuildGroupProject>
+    </ItemGroup>
+</Project>

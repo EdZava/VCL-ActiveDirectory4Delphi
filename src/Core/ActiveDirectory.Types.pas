@@ -1,4 +1,4 @@
-unit Common.ActiveDirectory.Types;
+unit ActiveDirectory.Types;
 
 interface
 

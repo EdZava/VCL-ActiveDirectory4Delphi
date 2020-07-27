@@ -1,4 +1,4 @@
-unit Common.ActiveDirectory.Winapi.DllMapper;
+unit ActiveDirectory.Winapi.DllMapper;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Winapi.Windows,
   Winapi.ActiveX,
 
-  Common.ActiveDirectory.Winapi.TLB;
+  ActiveDirectory.Winapi.TLB;
 
 const
   S_ADS_NOMORE_ROWS  = $00005012;

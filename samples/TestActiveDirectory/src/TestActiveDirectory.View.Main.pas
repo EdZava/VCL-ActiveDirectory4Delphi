@@ -1,9 +1,9 @@
-unit ActiveDirectory.View.Main;
+unit TestActiveDirectory.View.Main;
 
 interface
 
 uses
-  Common.ActiveDirectory.Types,
+  ActiveDirectory.Types,
 
   System.SysUtils, System.Classes, Vcl.Controls, Vcl.Forms, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ActnList,
   Vcl.Menus, Vcl.StdActns, System.Actions;
@@ -63,7 +63,7 @@ var
 implementation
 
 uses
-  Common.ActiveDirectory.Utils;
+  ActiveDirectory.Client;
 
 {$R *.dfm}
 
@@ -221,7 +221,7 @@ begin
         'AllProviders',
         function: string
         begin
-          Result := TActiveDirectoryUtils.GetAllProviders;
+          Result := ActiveDirectoryClient.GetAllProviders;
           AllProviders := Result;
         end
       );
@@ -232,7 +232,7 @@ begin
         'CurrentUserName',
         function: string
         begin
-          Result := TActiveDirectoryUtils.GetCurrentUserName;
+          Result := ActiveDirectoryClient.GetCurrentUserName;
           CurrentUserName := Result;
         end
       );
@@ -245,7 +245,7 @@ begin
         'CurrentDomainName',
         function: string
         begin
-          Result := TActiveDirectoryUtils.GetCurrentDomainName(CurrentUserName);
+          Result := ActiveDirectoryClient.GetCurrentDomainName(CurrentUserName);
           CurrentDomainName := Result;
         end
       );
@@ -258,7 +258,7 @@ begin
         'CurrentLDAPDomainName',
         function: string
         begin
-          Result := TActiveDirectoryUtils.GetCurrentLDAPDomainName(CurrentDomainName);
+          Result := ActiveDirectoryClient.GetCurrentLDAPDomainName(CurrentDomainName);
           CurrentLDAPDomainName := Result;
         end
       );
@@ -271,7 +271,7 @@ begin
         var
           Resultado: Boolean;
         begin
-          Resultado := TActiveDirectoryUtils.GetActiveDirectoryEnabled;
+          Resultado := ActiveDirectoryClient.GetActiveDirectoryEnabled;
           Result := BoolToStr(Resultado, True);
           CurrentDomainName := Result;
         end
@@ -299,7 +299,7 @@ begin
         var
           Resultado: Boolean;
         begin
-          Resultado := TActiveDirectoryUtils.GetUserInfo(edtDomain.Text, edtUserName.Text, UserInfo);
+          Resultado := ActiveDirectoryClient.GetUserInfo(edtDomain.Text, edtUserName.Text, UserInfo);
           Result := BoolToStr(Resultado, True);
         end
       );
@@ -312,7 +312,7 @@ begin
         var
           Resultado: Boolean;
         begin
-          Resultado := TActiveDirectoryUtils.GetUserActive(edtDomain.Text, edtUserName.Text);
+          Resultado := ActiveDirectoryClient.GetUserActive(edtDomain.Text, edtUserName.Text);
           Result := BoolToStr(Resultado, True);
         end
       );
@@ -340,7 +340,7 @@ begin
         var
           Resultado: Boolean;
         begin
-          Resultado := TActiveDirectoryUtils.AuthenticateUser(edtDomain.Text, edtUserName.Text, edtUserPass.Text);
+          Resultado := ActiveDirectoryClient.AuthenticateUser(edtDomain.Text, edtUserName.Text, edtUserPass.Text);
           Result := BoolToStr(Resultado, True);
         end
       );

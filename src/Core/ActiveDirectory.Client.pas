@@ -1,34 +1,13 @@
-unit Common.ActiveDirectory.Utils;
+unit ActiveDirectory.Client;
 
 interface
 
 uses
-  Common.ActiveDirectory.Types;
+  ActiveDirectory.Types,
+  ActiveDirectory.Client.Intf;
 
-type
-  { Class responsible for integration with Active Directory }
-  TActiveDirectoryUtils = class
-  private
-    class var FUserInfoEmpty: TADSIUserInfo;
-    class procedure ClearUserInfo(var inUserInfo: TADSIUserInfo);
-
-  protected
-    class function GetPathLDAP(inDomainName: string): string;
-    class function GetPathWinNT(inDomainName: string): string;
-    class function GetActiveLDAPDomainName: string;
-
-  public
-    class function GetCurrentUserName: string;
-    class function GetCurrentDomainName(inUserName: string): string;
-    class function GetCurrentLDAPDomainName(inDomainName: string): string;
-    class function GetAllProviders: string; // CSV (LDAP, WinNT, ...)
-    class function GetActiveDirectoryEnabled: Boolean;
-
-    class function GetUserInfo(inDomainName, inUserName: string; out outUserInfo: TADSIUserInfo): Boolean;
-    class function GetUserActive(inDomainName, inUserName: string): Boolean;
-
-    class function AuthenticateUser(inDomainName, inUserName, inUserPass: string): Boolean;
-  end;
+  { Singleton }
+  function ActiveDirectoryClient: IActiveDirectoryClient;
 
 implementation
 
@@ -38,8 +17,11 @@ uses
   Winapi.Windows,
   Winapi.ActiveX,
 
-  Common.ActiveDirectory.Winapi.DllMapper, // <-- Generate by mapping dlls ADSI
-  Common.ActiveDirectory.Winapi.TLB;       // <-- Generate by "Import Type Library" from "c:\windows\system32\activeds.tlb" (Active DS Type Library)
+  ActiveDirectory.Winapi.DllMapper, // <-- Generate by mapping dlls ADSI
+  ActiveDirectory.Winapi.TLB;       // <-- Generate by "Import Type Library" from "c:\windows\system32\activeds.tlb" (Active DS Type Library)
+
+var
+  FActiveDirectoryClient: IActiveDirectoryClient = nil;
 
 const
   _ProviderAD_LDAP      = 'LDAP:';
@@ -48,24 +30,78 @@ const
   _ProviderAD_PathDelim = '/';
   _CSV_Sep              = ',';
 
-  { TActiveDirectoryUtils }
+type
+  { Class Utilities }
+  TActiveDirectoryUtils = class
+  private
+    class var FUserInfoEmpty: TADSIUserInfo;
+  public
+    class procedure ClearUserInfo(var inUserInfo: TADSIUserInfo);
+
+    class function GetPathLDAP(inDomainName: string; inObjName: string = ''): string;
+    class function GetPathWinNT(inDomainName: string; inObjName: string = ''): string;
+  end;
+
+  { Class implements Active Directory Client }
+  TActiveDirectoryClient = class(TInterfacedObject, IActiveDirectoryClient)
+  private
+    function GetActiveLDAPDomainName: string;
+
+  protected
+    function GetCurrentUserName: string;
+    function GetCurrentDomainName(inUserName: string): string;
+    function GetCurrentLDAPDomainName(inDomainName: string): string;
+    function GetAllProviders: string; // CSV (LDAP, WinNT, ...)
+    function GetActiveDirectoryEnabled: Boolean;
+
+    function GetUserInfo(inDomainName, inUserName: string; out outUserInfo: TADSIUserInfo): Boolean;
+    function GetUserActive(inDomainName, inUserName: string): Boolean;
+
+    function AuthenticateUser(inDomainName, inUserName, inUserPass: string): Boolean;
+
+  public
+    class function New: IActiveDirectoryClient;
+  end;
+
+function ActiveDirectoryClient: IActiveDirectoryClient;
+begin
+  if (not Assigned(FActiveDirectoryClient)) then
+    FActiveDirectoryClient := TActiveDirectoryClient.New;
+
+  Result := FActiveDirectoryClient;
+end;
+
+{ TActiveDirectoryUtils }
 
 class procedure TActiveDirectoryUtils.ClearUserInfo(var inUserInfo: TADSIUserInfo);
 begin
   inUserInfo := Self.FUserInfoEmpty;
 end;
 
-class function TActiveDirectoryUtils.GetPathLDAP(inDomainName: string): string;
+class function TActiveDirectoryUtils.GetPathLDAP(inDomainName: string; inObjName: string = ''): string;
 begin
   Result := _ProviderAD_LDAP + _ProviderAD_PathBegin + Trim(inDomainName);
+
+  if (Trim(inObjName) <> '') then
+    Result := Result + _ProviderAD_PathDelim + inObjName
 end;
 
-class function TActiveDirectoryUtils.GetPathWinNT(inDomainName: string): string;
+class function TActiveDirectoryUtils.GetPathWinNT(inDomainName: string; inObjName: string = ''): string;
 begin
   Result := _ProviderAD_WinNT + _ProviderAD_PathBegin + Trim(inDomainName);
+
+  if (Trim(inObjName) <> '') then
+    Result := Result + _ProviderAD_PathDelim + inObjName
 end;
 
-class function TActiveDirectoryUtils.GetActiveLDAPDomainName: string;
+{ TActiveDirectoryClient }
+
+class function TActiveDirectoryClient.New: IActiveDirectoryClient;
+begin
+  Result := TActiveDirectoryClient.Create;
+end;
+
+function TActiveDirectoryClient.GetActiveLDAPDomainName: string;
 var
   UserName: string;
   DomainName: string;
@@ -75,7 +111,7 @@ begin
   Result := Self.GetCurrentLDAPDomainName(DomainName);
 end;
 
-class function TActiveDirectoryUtils.GetCurrentUserName: string;
+function TActiveDirectoryClient.GetCurrentUserName: string;
 const
   cnMaxUserNameLen = 254;
 var
@@ -89,7 +125,7 @@ begin
   Result := UserName;
 end;
 
-class function TActiveDirectoryUtils.GetCurrentDomainName(inUserName: string): string;
+function TActiveDirectoryClient.GetCurrentDomainName(inUserName: string): string;
 const
   DNLEN = 255;
 var
@@ -114,13 +150,13 @@ begin
   end;
 end;
 
-class function TActiveDirectoryUtils.GetCurrentLDAPDomainName(inDomainName: string): string;
+function TActiveDirectoryClient.GetCurrentLDAPDomainName(inDomainName: string): string;
 var
   Path: string;
   Resultado: HRESULT;
   AD: IADs;
 begin
-  Path := Self.GetPathLDAP(inDomainName);
+  Path := TActiveDirectoryUtils.GetPathLDAP(inDomainName);
   Resultado := ADsGetObject(Path, IADs, AD);
 
   if (Failed(Resultado)) then
@@ -132,7 +168,7 @@ begin
   Result := AD.Get('distinguishedName');
 end;
 
-class function TActiveDirectoryUtils.GetAllProviders: string;
+function TActiveDirectoryClient.GetAllProviders: string;
 var
   NSContainer: IADsContainer;
   Item: IADs;
@@ -172,7 +208,7 @@ begin
   end;
 end;
 
-class function TActiveDirectoryUtils.GetActiveDirectoryEnabled: Boolean;
+function TActiveDirectoryClient.GetActiveDirectoryEnabled: Boolean;
 var
   LDAPDomain: string;
   Providers: string;
@@ -190,7 +226,7 @@ begin
   end;
 end;
 
-class function TActiveDirectoryUtils.GetUserInfo(inDomainName, inUserName: string; out outUserInfo: TADSIUserInfo): Boolean;
+function TActiveDirectoryClient.GetUserInfo(inDomainName, inUserName: string; out outUserInfo: TADSIUserInfo): Boolean;
 var
   Path: string;
   Resultado: HRESULT;
@@ -203,7 +239,7 @@ var
   Temp: LongWord;
 begin
   Result := False;
-  Self.ClearUserInfo(outUserInfo);
+  TActiveDirectoryUtils.ClearUserInfo(outUserInfo);
 
   if (Trim(inDomainName) = '') then
     Exit;
@@ -211,7 +247,7 @@ begin
   if (Trim(inUserName) = '') then
     Exit;
 
-  Path := Self.GetPathWinNT(inDomainName) + _ProviderAD_PathDelim + inUserName;
+  Path := TActiveDirectoryUtils.GetPathWinNT(inDomainName, inUserName);
   Resultado := ADsGetObject(Path, IAdsUser, User);
 
   if (Failed(Resultado)) or (User = nil) then
@@ -254,7 +290,7 @@ begin
   Result := True;
 end;
 
-class function TActiveDirectoryUtils.GetUserActive(inDomainName, inUserName: string): Boolean;
+function TActiveDirectoryClient.GetUserActive(inDomainName, inUserName: string): Boolean;
 var
   UserInfo: TADSIUserInfo;
   UserFind: Boolean;
@@ -275,7 +311,7 @@ begin
   Result := True;
 end;
 
-class function TActiveDirectoryUtils.AuthenticateUser(inDomainName, inUserName, inUserPass: string): Boolean;
+function TActiveDirectoryClient.AuthenticateUser(inDomainName, inUserName, inUserPass: string): Boolean;
 var
   Path: string;
   Resultado: HRESULT;
@@ -289,7 +325,7 @@ begin
   if (Trim(inUserName) = '') then
     Exit;
 
-  Path := Self.GetPathLDAP(inDomainName);
+  Path := TActiveDirectoryUtils.GetPathLDAP(inDomainName);
   Resultado := ADsOpenObject(Path, inUserName, inUserPass, ADS_SECURE_AUTHENTICATION, IADs, Obj);
 
   if (Failed(Resultado)) or (Obj = nil) then

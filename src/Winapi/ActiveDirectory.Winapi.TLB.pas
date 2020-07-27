@@ -1,4 +1,4 @@
-unit Common.ActiveDirectory.Winapi.TLB;
+unit ActiveDirectory.Winapi.TLB;
 
 // ************************************************************************ //
 // WARNING                                                                    
