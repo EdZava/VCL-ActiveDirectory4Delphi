@@ -68,8 +68,9 @@ more information look at the unit [ActiveDirectory.Client](./src/Core/ActiveDire
 
 ## ✨ App demo using library
 
-![Download](https://img.shields.io/github/downloads/EdZava/VCL-ActiveDirectory4Delphi/latest/total)
-![Release](https://img.shields.io/github/v/release/EdZava/VCL-ActiveDirectory4Delphi)
+Download
+[Win32](https://github.com/EdZava/VCL-ActiveDirectory4Delphi/releases/latest/download/TestActiveDirectory-Win32.rar),
+[Win64](https://github.com/EdZava/VCL-ActiveDirectory4Delphi/releases/latest/download/TestActiveDirectory-Win64.rar)
 
 Application of example of using the library and information that could be recovered.
 
