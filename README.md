@@ -4,7 +4,7 @@
 
 # ActiveDirectory4Delphi
 
-Delphi Basic library for validation and authentication of LDAP users in Active Directory
+Delphi basic library for validation and authentication of LDAP users in Active Directory.
 
 ![release](https://img.shields.io/github/v/release/EdZava/VCL-ActiveDirectory4Delphi?style=flat-square)
 ![Delphi Supported Versions](https://img.shields.io/badge/Delphi%20Supported%20Versions-XE7%20and%20ever-blue.svg)
