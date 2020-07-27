@@ -35,8 +35,8 @@ requires
 contains
   ActiveDirectory.Winapi.TLB in '..\Winapi\ActiveDirectory.Winapi.TLB.pas',
   ActiveDirectory.Winapi.DllMapper in '..\Winapi\ActiveDirectory.Winapi.DllMapper.pas',
+  ActiveDirectory.Client.Intf in '..\Interfaces\ActiveDirectory.Client.Intf.pas',
   ActiveDirectory.Types in '..\Core\ActiveDirectory.Types.pas',
-  ActiveDirectory.Client in '..\Core\ActiveDirectory.Client.pas',
-  ActiveDirectory.Client.Intf in '..\Interfaces\ActiveDirectory.Client.Intf.pas';
+  ActiveDirectory.Client in '..\Core\ActiveDirectory.Client.pas';
 
 end.
