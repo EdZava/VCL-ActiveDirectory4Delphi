@@ -23,7 +23,7 @@ Delphi Basic library for validation and authentication of LDAP users in Active D
 
 ## ⚡️ Quickstart
 
-You need to use ActiveDirectory.Client
+You need to use **ActiveDirectory.Client**
 
 ```pascal
 uses ActiveDirectory.Client;
