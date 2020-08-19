@@ -131,6 +131,7 @@
         <DCCReference Include="..\Interfaces\ActiveDirectory.Client.Intf.pas"/>
         <DCCReference Include="..\Core\ActiveDirectory.Types.pas"/>
         <DCCReference Include="..\Core\ActiveDirectory.Client.pas"/>
+        <DCCReference Include="..\Core\ActiveDirectory.Client.Winapi.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

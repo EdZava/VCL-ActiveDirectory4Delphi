@@ -37,6 +37,7 @@ contains
   ActiveDirectory.Winapi.DllMapper in '..\Winapi\ActiveDirectory.Winapi.DllMapper.pas',
   ActiveDirectory.Client.Intf in '..\Interfaces\ActiveDirectory.Client.Intf.pas',
   ActiveDirectory.Types in '..\Core\ActiveDirectory.Types.pas',
-  ActiveDirectory.Client in '..\Core\ActiveDirectory.Client.pas';
+  ActiveDirectory.Client in '..\Core\ActiveDirectory.Client.pas',
+  ActiveDirectory.Client.Winapi in '..\Core\ActiveDirectory.Client.Winapi.pas';
 
 end.
