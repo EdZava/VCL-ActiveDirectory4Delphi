@@ -130,3 +130,7 @@ Authenticated = True
 ## Show your support
 
 Give a ⭐️ if this project helped you!
+
+### License
+
+ActiveDirectory4Delphi is [MIT licensed](./LICENSE).
